@@ -1,19 +1,19 @@
 server:
-  port: 8080  # Puerto del API Gateway
+  port: 8080
 
 spring:
   application:
-    name: api-gateway  # Nombre del servicio
+    name: api-gateway
 
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true  # Habilita el descubrimiento automático de servicios registrados en Eureka
-          lower-case-service-id: true  # Convierte a minúsculas los nombres de los servicios registrados en Eureka
+          enabled: true
+          lower-case-service-id: true
       routes:
         - id: customer-service
-          uri: lb://customer-service  # Usa el nombre del servicio registrado en Eureka
+          uri: lb://customer-service
           predicates:
             - Path=/api/v1/customers/**
 
@@ -37,11 +37,21 @@ spring:
           predicates:
             - Path=/api/v1/reports/**
 
+        - id: card-service
+          uri: lb://card-service
+          predicates:
+            - Path=/api/v1/cards/**
+
+        - id: wallet-service
+          uri: lb://wallet-service
+          predicates:
+            - Path=/api/v1/wallets/**
+
 eureka:
   client:
-    register-with-eureka: false  # ✅ El API Gateway solo consume Eureka, no se registra
-    fetch-registry: true  # ✅ Necesario para leer los servicios de Eureka
+    register-with-eureka: false
+    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/  # URL del servidor Eureka
+      defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
